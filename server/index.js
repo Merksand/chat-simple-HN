@@ -44,10 +44,9 @@ io.on('connection', async (socket) => {
     console.log({ username })
     let result;
     try {
-      result = await db.execute({
-        sql: 'INSERT INTO mensajes (content, user) VALUES (:data, :username)',
-        args: {data, username }
-      })
+      result = await db.execute(
+        'INSERT INTO mensajes (content, user) VALUES (?, ?)', [data, username]
+      )
     } catch (error) {
       console.log(error)
       return
@@ -66,7 +65,7 @@ io.on('connection', async (socket) => {
         args: [socket.handshake.auth.serverOffset ?? 0]
       })
 
-      console.log("DATOS BD RECOV: ",results)
+      console.log("DATOS BD RECOV: ", results)
       results.rows.forEach(row => {
         socket.emit('mensaje', { data: row.content, id: row.id.toString(), username: row.user })
       })
