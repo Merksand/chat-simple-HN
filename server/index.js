@@ -54,6 +54,7 @@ io.on('connection', async (socket) => {
   if (!socket.recovered) { //recuperase los mensajes sin conexion
     try {
       // console.log(socket)
+      console.log("socket handshake: ", socket.handshake.auth)
       const results = await db.execute("SELECT * FROM mensajes WHERE id > ?",
         [socket.handshake.auth.serverOffset || 0])
 
