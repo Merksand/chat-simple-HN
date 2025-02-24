@@ -1,20 +1,20 @@
 import express from 'express';
+import logger from 'morgan';
+import dotenv from 'dotenv';
 import { createServer } from "node:http";
 import { Server } from "socket.io";
-import logger from 'morgan';
 import { createClient } from "@libsql/client";
-import dotenv from 'dotenv';
-
-
 dotenv.config();
 
+console.log("DB_TOKEN:", process.env.DB_TOKEN);
 
-
-const port = process.env.PORT ?? 3000;
+const port = process.env.PORT ?? 3001;
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  connectionStateRecovery: {}
+})
 
 app.use(logger('dev'))
 
