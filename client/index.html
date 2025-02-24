@@ -30,7 +30,6 @@
 
     const socket = io({
       auth: {
-        token: 123,
         user: await getUserName(),
         serverOffset: 0
       }
@@ -73,7 +72,9 @@
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       if (input.value) {
+
         socket.emit('mensaje', input.value)
+        console.log("DENTRO DEL FORM: ",input.value)
 
 
         // console.log(input.value)
