@@ -30,12 +30,12 @@
       }
     }
 
-
+    const username = await getUserName();
     import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
     const socket = io({
       auth: {
         token: 123,
-        user: await getUserName(),
+        user: username,
         serverOffset: 0
       }
     });
