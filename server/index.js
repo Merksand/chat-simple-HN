@@ -58,9 +58,12 @@ io.on('connection', async (socket) => {
     try {
       // console.log(socket)
       console.log("socket handshake: ", socket.handshake.auth)
-      const results = await db.execute("SELECT * FROM mensajes WHERE id > ?",
-        [socket.handshake.auth.serverOffset ?? 0])
+      const results = await db.execute({
+        sql: 'SELECT id, content, user FROM mensajes WHERE id > ?',
+        args: [socket.handshake.auth.serverOffset ?? 0]
+      })
 
+      console.log("DATOS BD RECOV: ",results)
       results.rows.forEach(row => {
         socket.emit('mensaje', { data: row.content, id: row.id.toString(), username: row.user })
       })

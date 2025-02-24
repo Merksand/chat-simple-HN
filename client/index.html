@@ -18,16 +18,14 @@
         console.log(`User existed ${username}`)
         return username
       }
-      else {
-        const usuario = await fetch("https://random-data-api.com/api/v2/users/random_user")
-        const dataUser = await usuario.json()
+      const usuario = await fetch("https://random-data-api.com/api/v2/users/random_user")
+      const dataUser = await usuario.json()
 
-        // console.log(dataUser.dataUser.username)
+      // console.log(dataUser.dataUser.username)
 
-        localStorage.setItem('username', dataUser.username)
-        return dataUser.username
-        // console.log(dataUser)
-      }
+      localStorage.setItem('username', dataUser.username)
+      return dataUser.username
+      // console.log(dataUser)
     }
 
     const socket = io({
@@ -45,9 +43,13 @@
 
     socket.on('mensaje', async (envData) => {
       console.log(envData)
-      const { data, username } = envData
+      const { data, id, username } = envData
 
+      console.log("ENVDATA: ", envData)
       console.log("DATA :", data)
+
+
+      socket.auth.serverOffset = id
       // console.log("Socket: ", data, from)
 
       // const displayUsername = username === storedUsername ? "Yo" : username;
