@@ -55,7 +55,7 @@ io.on('connection', async (socket) => {
     try {
       // console.log(socket)
       const results = await db.execute("SELECT * FROM mensajes WHERE id > ?",
-        [socket.handshake.auth.serverOffset ?? 0])
+        [socket.handshake.auth.serverOffset || 0])
 
       results.rows.forEach(row => {
         socket.emit('mensaje', { data: row.content, id: row.id, from: socket.id.slice(0, 5), username: row.user })
