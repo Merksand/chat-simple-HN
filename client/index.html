@@ -36,7 +36,7 @@
       auth: {
         token: 123,
         user: username,
-        serverOffset: 0
+        serverOffset: 5
       }
     });
 
@@ -49,12 +49,8 @@
 
 
       console.log(envData)
-      const { data, from, username } = envData
-      const newData = {
-        data,
-        from: from
-      }
-
+      const { data, username } = envData
+     
       console.log("DATA :", data)
       // console.log("Socket: ", data, from)
 
@@ -65,7 +61,7 @@
       li.className = "p-2 bg-blue-500 w-max rounded mt-2 ml-2 mb-2";
       li.innerHTML = `<span class="font-bold block text-gray-600 text-sm">${username}</span>
                 <span class='text-lg'></span>`;
-      li.querySelector('span.text-lg').textContent = newData.data;
+      li.querySelector('span.text-lg').textContent = data;
       messages.appendChild(li);
 
       // scroll to bottom of messages
