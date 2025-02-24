@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 const db = createClient({
   url: process.env.DATABASE_URL,
-  authToken: process.env.AUTO_TOKEN
+  authToken: process.env.DB_TOKEN
 })
 
 
@@ -59,10 +59,10 @@ io.on('connection', async (socket) => {
       // console.log(socket)
       console.log("socket handshake: ", socket.handshake.auth)
       const results = await db.execute("SELECT * FROM mensajes WHERE id > ?",
-        [socket.handshake.auth.serverOffset || 0])
+        [socket.handshake.auth.serverOffset ?? 0])
 
       results.rows.forEach(row => {
-        socket.emit('mensaje', { data: row.content, id: row.id, username: row.user })
+        socket.emit('mensaje', { data: row.content, id: row.id.toString(), username: row.user })
       })
       // console.log("Mensajes recuperados: ", results)
       // console.log(results)
