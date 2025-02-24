@@ -78,11 +78,34 @@ io.on('connection', async (socket) => {
     console.log(data)
     let result;
     try {
-      result = await db.execute(`INSERT INTO mensajes (content, user) VALUES (?,?)`, [data, username])
+      console.log("socket handshake: ", socket.handshake.auth);
+    
+      const offset = Number.isInteger(socket.handshake.auth.serverOffset)
+        ? socket.handshake.auth.serverOffset
+        : 0;
+    
+      const query = offset > 0
+        ? "SELECT * FROM mensajes WHERE id > ?"
+        : "SELECT * FROM mensajes";
+    
+      const results = offset > 0
+        ? await db.execute(query, [offset])
+        : await db.execute(query);
+    
+      results.rows.forEach(row => {
+        socket.emit('mensaje', {
+          data: row.content,
+          id: row.id,
+          from: socket.id.slice(0, 5),
+          username: row.user
+        });
+      });
+    
+      socket.recovered = true;
     } catch (error) {
-      console.log(error)
-      return
+      console.error("Error al recuperar mensajes: ", error);
     }
+    
     io.emit('mensaje',{ data, id: result.lastInsertRowid.toString(),  username })
     // io.emit('mensaje', { data, id: result.lastInsertRowid.toString() })
 
