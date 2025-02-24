@@ -10,13 +10,10 @@
 <body>
 
   <script type="module">
-
-
+    import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
 
     const getUserName = async () => {
-
       const username = localStorage.getItem("username")
-
       if (username) return username
       else {
         const usuario = await fetch("https://random-data-api.com/api/v2/users/random_user")
@@ -30,13 +27,11 @@
       }
     }
 
-    const username = await getUserName();
-    import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js';
     const socket = io({
       auth: {
         token: 123,
-        user: username,
-        serverOffset: 5
+        user: await getUserName(),
+        serverOffset: 0
       }
     });
 
@@ -46,11 +41,9 @@
     const messages = document.getElementById('messages');
 
     socket.on('mensaje', async (envData) => {
-
-
       console.log(envData)
       const { data, username } = envData
-     
+
       console.log("DATA :", data)
       // console.log("Socket: ", data, from)
 
