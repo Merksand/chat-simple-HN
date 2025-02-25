@@ -46,7 +46,7 @@ io.on('connection', async (socket) => {
     try {
       result = await db.execute({
         sql: 'INSERT INTO mensajes (content, user) VALUES (:data, :username)',
-        args: [data, username]
+        args: { data, username }
       })
     } catch (error) {
       console.log(error)
